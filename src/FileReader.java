@@ -40,25 +40,49 @@ public class FileReader {
             while(br.readLine()!=null){
                 Counter++;
             }
-            int i=1;
-            HashMap<Integer, String> shipType = new HashMap<Integer, String>();
-            HashMap<Integer, String> shipID = new HashMap<Integer, String>();
-            HashMap<Integer, String> shipX = new HashMap<Integer, String>();
-            HashMap<Integer, String> shipY = new HashMap<Integer, String>();
+            /**
+             * this counts how many lines are there in the file that are not empty
+             * and the part below does operations on every line*/
+            int i=1;//initialized a starting point
+            HashMap<Integer, String[]> ship = new HashMap<Integer, String[]>();
+            /**this hashmap conatains a ships attributes and in the order given
+             * 1st element contains id
+             * 2nd 3rd contain x and y postions
+             * and the rest contain the rest attributes
+             */
+            HashMap<Integer, String> ShipType=new HashMap<Integer, String>();
+            //this hashmap contain ship type
             while(i<=Counter){
                 String line=br.readLine();
                 if(line!=null){
-                String[] values=line.split(" ");
-                if(values.length>5){
-                shipType.put(i,values[0]);
-                shipID.put(i,values[1]);
-                shipX.put(i,values[2]);
-                shipY.put(i,values[3]);
-                i++;}
-                else{throw new IllegalArgumentException("invalid data format. missing spaceship attributes");}
-                }
-                else{continue;}
+                    String[] values=line.split(" ");
+                String[] values1=line.split(" ",1);
+                String ShipFormat= values1[0];
+                String[] ShipAttributes=values1[1].split(" ");
+                    /**
+                     * till here I have first separated the line into 2parts
+                     * 1st part = type, stored in ShipType
+                     * 2nd part= an array of ship attributes which are stored in ship
+                     */
+                if(values.length>5){//error checking for length of the whol;e line
+                    ShipType.put(i,ShipFormat);
+                    ship.put(i,ShipAttributes);
+                    if(ShipType.get(i)=="CARGOSHIP"){
+                        if(ship.get(i).length!=8){
+                            throw new IllegalArgumentException("invalid data format. missing Cargoship attributes");
+                            break;
+                        }
+                    }
+                    if(ship.get(i)[0].length()!=5){
+                        throw new IllegalArgumentException("Invalid ID length: " + ship.get(i)[0]);
+                    }
 
+                }
+                else{throw new IllegalArgumentException("invalid data format. missing spaceship attributes");
+                break;}//for if length of the line si less than 5
+                }
+                else{continue;}//for if a line is empty
+            i++;
             }
         }
         catch(IOException e){
