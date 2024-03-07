@@ -6,6 +6,11 @@
 public abstract class Spaceship {
 
     // attributes:
+private int x;
+private int y;
+private String id;
+private SpaceshipType type;
+
 
     // The unique identifier of the spaceship
     // The current coordinates of the spaceship
@@ -13,14 +18,17 @@ public abstract class Spaceship {
 
     // methods:
 
-    /**
-     * Constructs a Spaceship object with the specified attributes.
-     *
-     * @param ....
-     *
-     */
-    // constructor goes here...
 
+    // constructor goes here...
+    public Spaceship(String id, int x, int y, SpaceshipType type) {
+        /**
+         * "this" is used to assign the insatnce variables to the parameters of the constructor
+         */
+        this.id = id;   // Assign the id parameter to the id field of the object
+        this.x = x;     // Assign the x parameter to the x field of the object
+        this.y = y;     // Assign the y parameter to the y field of the object
+        this.type = type; // Assign the type parameter to the type field of the object
+    }
     /**
      * Abstract method to define the movement behavior of the spaceship.
      *
@@ -47,23 +55,26 @@ public abstract class Spaceship {
 
     /**
      * Retrieves the current x-coordinate of the spaceship.
-     *
-     * ....
      */
+    protected int getX(){
+        return x;
+    }
     // getX
 
     /**
      * Retrieves the current y-coordinate of the spaceship.
-     *
-     * .....
      */
+    protected  int getY(){
+        return y;
+    }
     // getY
 
     /**
      * Retrieves the type of the spaceship.
-     *
-     * .....
      */
+    protected SpaceshipType getType(){
+        return type;
+    }
     // getType
 
     /**
