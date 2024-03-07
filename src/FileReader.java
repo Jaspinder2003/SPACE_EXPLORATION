@@ -1,6 +1,7 @@
 import javax.imageio.IIOException;
 import javax.management.RuntimeErrorException;
 import java.io.*;
+import java.util.HashMap;
 
 /**
  * The FileReader class provides static methods for reading data from a file and constructing a GalacticMap object.
@@ -34,11 +35,31 @@ public class FileReader {
         BufferedReader br = new BufferedReader(file_reader);
         try{
             String line1=br.readLine();
-            int Counter=0;
+            String size=line1;
+            int Counter=1;
             while(br.readLine()!=null){
                 Counter++;
             }
-            while(br.read)
+            int i=1;
+            HashMap<Integer, String> shipType = new HashMap<Integer, String>();
+            HashMap<Integer, String> shipID = new HashMap<Integer, String>();
+            HashMap<Integer, String> shipX = new HashMap<Integer, String>();
+            HashMap<Integer, String> shipY = new HashMap<Integer, String>();
+            while(i<=Counter){
+                String line=br.readLine();
+                if(line!=null){
+                String[] values=line.split(" ");
+                if(values.length>5){
+                shipType.put(i,values[0]);
+                shipID.put(i,values[1]);
+                shipX.put(i,values[2]);
+                shipY.put(i,values[3]);
+                i++;}
+                else{throw new IllegalArgumentException("invalid data format. missing spaceship attributes");}
+                }
+                else{continue;}
+
+            }
         }
         catch(IOException e){
             throw new UncheckedIOException(new IOException("File not found: "+fileName));

@@ -31,16 +31,14 @@ private SpaceshipType type;
     }
     /**
      * Abstract method to define the movement behavior of the spaceship.
-     *
-     * @param ...
      */
+    public abstract void move();
     // move ....
 
     /**
      * Abstract method to define the interaction behavior of the spaceship with another spaceship.
-     *
-     * @param ....
      */
+    public abstract void interact();
     // interact ...
 
 
@@ -48,9 +46,10 @@ private SpaceshipType type;
 
     /**
      * Retrieves the unique identifier of the spaceship.
-     *
-     * ....
      */
+    protected String getID(){
+        return id;
+    }
     // getID
 
     /**
@@ -79,16 +78,18 @@ private SpaceshipType type;
 
     /**
      * Sets the x-coordinate of the spaceship to the specified value.
-     *
-     * @param ....
      */
+    public void setX(int newX){
+        x=newX;
+    }
     // setX
 
     /**
      * Sets the y-coordinate of the spaceship to the specified value.
-     *
-     * @param .....
      */
+    public void setY(int newY){
+        y=newY;
+    }
     // setY
 
 
