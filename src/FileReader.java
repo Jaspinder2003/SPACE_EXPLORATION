@@ -23,16 +23,18 @@ public class FileReader {
      * @throws RuntimeException if the file specified by fileName is not found or if an error occurs while reading the file
      *
      */
-    public static HashMap<Integer, String> shipType = new HashMap<>();
-    public static HashMap<Integer, String> shipID = new HashMap<>();
-    public static HashMap<Integer, Integer> shipX = new HashMap<>();
-    public static HashMap<Integer, Integer> shipY = new HashMap<>();
-    public static HashMap<Integer, Integer> damage = new HashMap<>();
-    public static HashMap<Integer, Integer> scan = new HashMap<>();
-    public static HashMap<Integer, Integer> CargoCapacity = new HashMap<>();
-    public static HashMap<Integer, Integer> CurrentCargo = new HashMap<>();
-    public static HashMap<Integer, Integer> TargetX = new HashMap<>();
-    public static HashMap<Integer, Integer> TargetY = new HashMap<>();
+    private static HashMap<Integer, String> shipType = new HashMap<>();
+    private static HashMap<Integer, String> shipID = new HashMap<>();
+    private static HashMap<Integer, Integer> shipX = new HashMap<>();
+    private static HashMap<Integer, Integer> shipY = new HashMap<>();
+    private static HashMap<Integer, Integer> damage = new HashMap<>();
+    private static HashMap<Integer, Integer> scan = new HashMap<>();
+    private static HashMap<Integer, Integer> CargoCapacity = new HashMap<>();
+    private static HashMap<Integer, Integer> CurrentCargo = new HashMap<>();
+    private static HashMap<Integer, Integer> TargetX = new HashMap<>();
+    private static HashMap<Integer, Integer> TargetY = new HashMap<>();
+    private static int size;
+    static GalacticMap map= new GalacticMap(size);
 
     public static GalacticMap readFromFile(String fileName) throws FileNotFoundException {
         // Your code goes here ....
@@ -46,7 +48,7 @@ public class FileReader {
         BufferedReader br = new BufferedReader(file_reader);
         try{
             String line1=br.readLine();
-            int size=0;
+
             try {
                 size = Integer.parseInt(line1);
             }
@@ -111,14 +113,20 @@ public class FileReader {
                             if (values.length != 8) {
                                 throw new IllegalArgumentException("Invalid data format: Missing cargo ship attributes.");
                             }
+                            Spaceship cargo=new CargoShip(shipID.get(i),shipX.get(i),shipY.get(i),CargoCapacity.get(i),CurrentCargo.get(i),TargetX.get(i),TargetY.get(i));
+                            map.placeSpaceship(cargo);
                         }
                         if(shipType.get(i).equals("FIGHTER")){
                             int d=Integer.parseInt(values[4]);
                             damage.put(i,d);
+                            Spaceship fighter=new FighterShip(shipID.get(i),shipX.get(i),shipY.get(i),damage.get(i));
+                            map.placeSpaceship(fighter);
                         }
                         if(shipType.get(i).equals("EXPLORER")){
                             int s=Integer.parseInt(values[4]);
                             scan.put(i,s);
+                            Spaceship explorer=new ExplorerShip(shipID.get(i),shipX.get(i),shipY.get(i),scan.get((i)));
+                            map.placeSpaceship(explorer);
                         }
                     }
                     else{
@@ -143,7 +151,9 @@ public class FileReader {
             throw new UncheckedIOException(new IOException("File not found: "+fileName));
         }
 
-        return null;
+
+
+        return map;
         // hint: you need to call placeSpaceship method....
 
     }
