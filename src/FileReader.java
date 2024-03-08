@@ -2,6 +2,7 @@ import javax.imageio.IIOException;
 import javax.management.RuntimeErrorException;
 import java.io.*;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * The FileReader class provides static methods for reading data from a file and constructing a GalacticMap object.
@@ -22,6 +23,16 @@ public class FileReader {
      * @throws RuntimeException if the file specified by fileName is not found or if an error occurs while reading the file
      *
      */
+    public static HashMap<Integer, String> shipType = new HashMap<>();
+    public static HashMap<Integer, String> shipID = new HashMap<>();
+    public static HashMap<Integer, Integer> shipX = new HashMap<>();
+    public static HashMap<Integer, Integer> shipY = new HashMap<>();
+    public static HashMap<Integer, Integer> damage = new HashMap<>();
+    public static HashMap<Integer, Integer> scan = new HashMap<>();
+    public static HashMap<Integer, Integer> CargoCapacity = new HashMap<>();
+    public static HashMap<Integer, Integer> CurrentCargo = new HashMap<>();
+    public static HashMap<Integer, Integer> TargetX = new HashMap<>();
+    public static HashMap<Integer, Integer> TargetY = new HashMap<>();
 
     public static GalacticMap readFromFile(String fileName) throws FileNotFoundException {
         // Your code goes here ....
@@ -35,36 +46,60 @@ public class FileReader {
         BufferedReader br = new BufferedReader(file_reader);
         try{
             String line1=br.readLine();
-             int size=Integer.parseInt(line1);
-            int Counter=1;
-            while(br.readLine()!=null){
-                Counter++;
+            int size=0;
+            try {
+                size = Integer.parseInt(line1);
             }
+            catch(NumberFormatException e){
+                throw new NumberFormatException("Invalid file format:Missing map size");
+            }
+            /**
+             * converts the size into an Integer from a string.
+             */
+
             /**
              * this counts how many lines are there in the fi*/
             int i=1;
-            HashMap<Integer, String> shipType = new HashMap<Integer, String>();
-            HashMap<Integer, String> shipID = new HashMap<Integer, String>();
-            HashMap<Integer, Integer> shipX = new HashMap<Integer, Integer>();
-            HashMap<Integer, Integer> shipY = new HashMap<Integer, Integer>();
-            HashMap<Integer, Integer> damage = new HashMap<Integer, Integer>();
-            HashMap<Integer, Integer> scan = new HashMap<Integer, Integer>();
-            HashMap<Integer, Integer> CargoCapacity = new HashMap<Integer, Integer>();
-            HashMap<Integer, Integer> CurrentCargo = new HashMap<Integer, Integer>();
-            HashMap<Integer, Integer> TargetX = new HashMap<Integer, Integer>();
-            HashMap<Integer, Integer> TargetY = new HashMap<Integer, Integer>();
-            while(i<=Counter){
-                String line=br.readLine();
-                if(line!=null){
+            HashSet<String> id = new HashSet<String>();
+            HashSet<String> positions=new HashSet<String>();
+            String line;
+            while(((line = br.readLine()) != null)){
+                if(!line.isEmpty()){
+                    /**
+                     * this if statement skips the empty lines
+                     */
                     String[] values=line.split(" ");
                 shipType.put(i,values[0]);
-                shipID.put(i,values[1]);
+                if(!shipType.get(i).equals("FIGHTER")&&!shipType.get(i).equals("CARGOSHIP")&&!shipType.get(i).equals("EXPLORER")){
+                    throw new IllegalArgumentException("Invalid Spcaeship Type"+shipType.get(i));
+                }
+                    /**
+                     * error checking for seeing that the types are consistent
+                     */
+                if(id.add(values[1])){
+                    id.add(values[1]);
+                    shipID.put(i,values[1]);
+                }
+                /**
+                 * used in checking if there are any duplicate values for id
+                 */
+                else{throw new IllegalArgumentException(("Non-unique ID: "+values[1])); }
+                    /**
+                     * error checking for unique id
+                     * */
+                    try{
                 int x=Integer.parseInt(values[2]);
                 int y=Integer.parseInt(values[3]);
-                shipX.put(i,x);
-                shipY.put(i,y);
+                String position=x+","+y;
+                if(positions.add(position)){
+                    positions.add(position);
+                    shipX.put(i,x);
+                    shipY.put(i,y);}
+                else {
+                    throw new IllegalArgumentException("Wrong input file! the position is filled with another item!");
+                }
                     if(values.length>5){
-                        if(shipType.get(i)=="CARGOSHIP") {
+                        if(shipType.get(i).equals("CARGOSHIP")) {
                             int limit=Integer.parseInt(values[4]);
                             int CC=Integer.parseInt(values[5]);
                             int Tx=Integer.parseInt(values[6]);
@@ -77,25 +112,28 @@ public class FileReader {
                                 throw new IllegalArgumentException("Invalid data format: Missing cargo ship attributes.");
                             }
                         }
-                        if(shipType.get(i)=="FIGHTER"){
+                        if(shipType.get(i).equals("FIGHTER")){
                             int d=Integer.parseInt(values[4]);
                             damage.put(i,d);
                         }
-                        if(shipType.get(i)=="EXPLORER"){
+                        if(shipType.get(i).equals("EXPLORER")){
                             int s=Integer.parseInt(values[4]);
                             scan.put(i,s);
                         }
                     }
                     else{
-                    throw new IllegalArgumentException("Invalis data format: Missing spaceship attributes.");
+                    throw new IllegalArgumentException("Invalid data format: Missing spaceship attributes.");
                     }
                     if(values[1].length()<5){
-                        throw new IllegalArgumentException("Invalid ID lenggth: "+ values[1]);
+                        throw new IllegalArgumentException("Invalid ID length: "+ values[1]);
                     }
                     if(shipX.get(i)<0||shipX.get(i)>(size-1)){
                         throw new ArrayIndexOutOfBoundsException("Wrong input file! position is outside of the map!");
                     }
-                    i++;
+                    i++;}
+                    catch(NumberFormatException e){
+                        throw new NumberFormatException("Invalid data format: unable to parse numeric value");
+                    }
                 }
                 else{continue;}
             }
