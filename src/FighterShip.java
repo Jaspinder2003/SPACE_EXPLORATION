@@ -6,6 +6,8 @@ import java.util.Random;
  */
 public class FighterShip extends Spaceship {
     private int damage;// The damage inflicted by the fighter ship during combat
+    private int x;
+    private int y;
 
     /**
      * Constructs a FighterShip object with the specified attributes.
@@ -16,7 +18,12 @@ public class FighterShip extends Spaceship {
      * @param damage The damage inflicted by the fighter ship during combat.
      */
     public FighterShip(String id, int x, int y, int damage) {
+        super(id,x,y,SpaceshipType.FIGHTER);
         // Initialize FighterShip attributes
+        this.damage=damage;
+        this.x=x;
+        this.y=y;
+
     }
 
     /**
@@ -39,7 +46,40 @@ public class FighterShip extends Spaceship {
     @Override
     public void move(GalacticMap galacticMap) {
         System.out.print("........Moving.......");
+        int r=getRandomDirection();
+        switch (r){
+            case 0://moving up
+                change(galacticMap,x-1,y);
+                break;
 
+            case 1://moving down
+                change(galacticMap,x+1,y);
+                break;
+
+            case 2://moving left
+                change(galacticMap,x,y-1);
+                break;
+
+            case 3://moving right
+                change(galacticMap,x,y+1);
+                break;
+
+            case 4://moving downright
+                change(galacticMap,x+1,y+1);
+                break;
+
+            case 5://moving downleft
+                change(galacticMap,x+1,y-1);
+                break;
+
+            case 6://moving upright
+                change(galacticMap,x-1,y+1);
+                break;
+
+            case 7://moving upleft
+                change(galacticMap,x-1,y-1);
+                break;
+        }
         // Implementation for fighter ship movement
 
     }
@@ -57,6 +97,11 @@ public class FighterShip extends Spaceship {
 
         // Implementation for fighter ship interaction (e.g., combat)
 
+    }
+    private void change(GalacticMap galacticMap,int newX,int newY){
+        Spaceship f= galacticMap.getSpaceshipAt(x,y);
+        galacticMap.moveSpaceshipTo(f,newX,newY);
+        galacticMap.removeSpaceshipAt(x,y);
     }
 }
 

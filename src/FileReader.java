@@ -23,19 +23,19 @@ public class FileReader {
      * @throws RuntimeException if the file specified by fileName is not found or if an error occurs while reading the file
      *
      */
-    public static HashMap<Integer, String> shipType = new HashMap<>();
-    public static HashMap<Integer, String> shipID = new HashMap<>();
-    public static HashMap<Integer, Integer> shipX = new HashMap<>();
-    public static HashMap<Integer, Integer> shipY = new HashMap<>();
-    public static HashMap<Integer, Integer> damage = new HashMap<>();
-    public static HashMap<Integer, Integer> scan = new HashMap<>();
-    public static HashMap<Integer, Integer> CargoCapacity = new HashMap<>();
-    public static HashMap<Integer, Integer> CurrentCargo = new HashMap<>();
-    public static HashMap<Integer, Integer> TargetX = new HashMap<>();
-    public static HashMap<Integer, Integer> TargetY = new HashMap<>();
-    public static int totalFighters=0;
-    public static int totalExplorers=0;
-    public static int totalCargoships=0;
+    private static HashMap<Integer, String> shipType = new HashMap<>();
+    private static HashMap<Integer, String> shipID = new HashMap<>();
+    private static HashMap<Integer, Integer> shipX = new HashMap<>();
+    private static HashMap<Integer, Integer> shipY = new HashMap<>();
+    private static HashMap<Integer, Integer> damage = new HashMap<>();
+    private static HashMap<Integer, Integer> scan = new HashMap<>();
+    private static HashMap<Integer, Integer> CargoCapacity = new HashMap<>();
+    private static HashMap<Integer, Integer> CurrentCargo = new HashMap<>();
+    private static HashMap<Integer, Integer> TargetX = new HashMap<>();
+    private static HashMap<Integer, Integer> TargetY = new HashMap<>();
+    private static int totalFighters=0;
+    private static int totalExplorers=0;
+    private static int totalCargoships=0;
     private static int size;
     static GalacticMap map= new GalacticMap(size);
 

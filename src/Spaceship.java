@@ -32,13 +32,13 @@ private SpaceshipType type;
     /**
      * Abstract method to define the movement behavior of the spaceship.
      */
-    public abstract void move();
+    public abstract void move(GalacticMap galacticMap);
     // move ....
 
     /**
      * Abstract method to define the interaction behavior of the spaceship with another spaceship.
      */
-    public abstract void interact();
+    public abstract void interact(GalacticMap galacticMap,Spaceship other);
     // interact ...
 
 

@@ -10,6 +10,9 @@ public class CargoShip extends Spaceship {
 
     private int targetX; // The x-coordinate of the cargo ship's destination.
     private int targetY; // The y-coordinate of the cargo ship's destination.
+    private int X=0;
+    private int Y=0;
+    private int checkX=0;
 
     private boolean reachedDestination; // Indicates if the cargo has reached its destination
 
@@ -26,6 +29,14 @@ public class CargoShip extends Spaceship {
      */
     public CargoShip(String id, int x, int y, double cargoCapacity, double currentCargo, int targetX, int targetY) {
         // Initialize CargoShip attributes properly
+        super(id,x,y,SpaceshipType.CARGOSHIP);
+        X=x;
+        Y=y;
+        this.targetX=targetX;
+        this.targetY=targetY;
+        this.currentCargo=currentCargo;
+        this.cargoCapacity=cargoCapacity;
+        checkX=X-targetX;
     }
 
     /**
@@ -38,7 +49,9 @@ public class CargoShip extends Spaceship {
     public void move(GalacticMap galacticMap) {
 
         System.out.print("........Moving.......");
-
+        if(checkX>0){
+            change(galacticMap,X-1,Y);
+        }
         // CargoShip-specific movement logic
 
     }
@@ -118,6 +131,12 @@ public class CargoShip extends Spaceship {
      */
     public boolean isReachedDestination() {
         return reachedDestination;
+    }
+
+    private void change(GalacticMap galacticMap,int newX,int newY){
+        Spaceship f= galacticMap.getSpaceshipAt(X,Y);
+        galacticMap.moveSpaceshipTo(f,newX,newY);
+        galacticMap.removeSpaceshipAt(X,Y);
     }
 }
 

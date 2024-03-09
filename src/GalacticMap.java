@@ -126,7 +126,19 @@ public class GalacticMap {
      *
      */
     public void moveSpaceshipTo(Spaceship spaceship, int newX, int newY) {
-        grid[newX][newY]=spaceship;
+        if(isValidMove(newX,newY)){
+            if(isCollision(newX,newY)){
+                spaceship.setX(newX);
+                spaceship.setY(newY);
+                placeSpaceship(spaceship);
+            }
+            else{
+                System.out.println("Moving Failed! the position is filled with another spaceship!");
+            }
+        }
+        else{
+            System.out.println("“Moving Failed! out of bound x or y!");
+        }
     }
     /**
      * Checks if the specified coordinates represent a valid move within the GalacticMap grid.
@@ -144,6 +156,8 @@ public class GalacticMap {
         }
     }
 
+
+
     /**
      * Checks if the specified coordinates represent a collision with another spaceship.
      *
@@ -159,6 +173,7 @@ public class GalacticMap {
                 return true;
             }
     }
+
 
     /**
      * Places the specified spaceship, that is read from the file, in the GalacticMap.
@@ -178,7 +193,7 @@ public class GalacticMap {
      */
     public boolean allCargoesReachedDestination() {
         // Check if all cargoes have reached their destination
-
+        return true;
 
     }
 
@@ -189,7 +204,7 @@ public class GalacticMap {
      *
      */
     public boolean allExplorersAndCargoesRemoved() {
-
+        return true;
     }
 
     /**
@@ -200,7 +215,7 @@ public class GalacticMap {
      */
     public boolean allFightersReported() {
         // Check if explorers have interacted/reported all fighters
-        if(reportList.equals(fighterNumber)){
+        if(reportList.size()==fighterNumber){
             return true;
         }
         else{

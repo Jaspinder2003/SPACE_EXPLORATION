@@ -19,8 +19,8 @@ public class ExplorerShip extends Spaceship {
      */
     public ExplorerShip(String id, int x, int y, int scanRange) {
         super(id, x, y, SpaceshipType.EXPLORER);
-        int X=0;
         X=x;
+        Y=y;
         this.scanRange = scanRange;
     }
 
@@ -36,19 +36,10 @@ public class ExplorerShip extends Spaceship {
         System.out.print("........Moving.......");
 
         if(moveHorizontally){
-            if(galacticMap.isCollision(X,Y+1)) {
-                if (galacticMap.isValidMove(X, Y + 1)) {
-                    setY(Y + 1);
-                } else {
-                    System.out.println("“Moving Failed! out of bound x or y!");
-                }
-            }
-            else{
-                System.out.println("Moving Failed! the position is filled with another spaceship!");
-            }
+            change(galacticMap,X,Y+1);
         }
         else{
-            setX(X+1);
+            change(galacticMap,X+1,Y);
         }
 
         // Implementation for explorer ship movement
@@ -67,5 +58,10 @@ public class ExplorerShip extends Spaceship {
         System.out.println(".........interacting...........with.... " + other.getName());
 
         // Implementation for explorer ship interaction
+    }
+    private void change(GalacticMap galacticMap,int newX,int newY){
+        Spaceship f= galacticMap.getSpaceshipAt(X,Y);
+        galacticMap.moveSpaceshipTo(f,newX,newY);
+        galacticMap.removeSpaceshipAt(X,Y);
     }
 }
