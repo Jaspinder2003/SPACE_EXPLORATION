@@ -79,7 +79,34 @@ public class GalacticMap {
      */
     @Override
     public String toString() {
-
+        String st=null;//initialized a string st with null
+        /**
+         * looping through the whole grid
+         */
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                /**
+                 * checking if the specified location at the grid has a spaceship object
+                 * and if it does what type it is
+                 */
+                if(getSpaceshipAt(i,j)!=null){
+                    if(getSpaceshipAt(i, j).getID().charAt(0) == 'f'){
+                        st="[ "+"F-"+getSpaceshipAt(i, j).getID()+" ]";
+                    }
+                    else if(getSpaceshipAt(i, j).getID().charAt(0) == 'e'){
+                        st="[ "+"E-"+getSpaceshipAt(i, j).getID()+" ]";
+                    }
+                    else if (getSpaceshipAt(i, j).getID().charAt(0) == 'c') {
+                        st="[ "+"C-"+getSpaceshipAt(i, j).getID()+" ]";
+                    }
+                }
+                else{
+                    st="[         ]";
+                }
+            }
+            st=st+"\n";
+        }
+        return st;
     }
 
     /**
@@ -99,7 +126,7 @@ public class GalacticMap {
      *
      */
     public void moveSpaceshipTo(Spaceship spaceship, int newX, int newY) {
-        // ....
+        grid[newX][newY]=spaceship;
     }
     /**
      * Checks if the specified coordinates represent a valid move within the GalacticMap grid.
@@ -109,7 +136,12 @@ public class GalacticMap {
      */
     private boolean isValidMove(int newX, int newY) {
         // Check if the new position is within the grid boundaries
-
+        if(newX< grid.length-1&&newY<grid[0].length-1){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     /**
@@ -120,7 +152,12 @@ public class GalacticMap {
      */
     private boolean isCollision(int newX, int newY) {
         // Check if the new position is occupied by another spaceship
-
+            if(grid[newX][newY]!=null){
+                return false;
+            }
+            else{
+                return true;
+            }
     }
 
     /**
@@ -130,8 +167,7 @@ public class GalacticMap {
      *
      */
     public void placeSpaceship(Spaceship spaceship) {
-        // Place the spaceship in its position
-
+        grid[spaceship.getX()][spaceship.getY()]=spaceship;
     }
 
     /**
@@ -141,9 +177,8 @@ public class GalacticMap {
      *
      */
     public boolean allCargoesReachedDestination() {
-        //...
         // Check if all cargoes have reached their destination
-        //...
+
 
     }
 
@@ -165,6 +200,11 @@ public class GalacticMap {
      */
     public boolean allFightersReported() {
         // Check if explorers have interacted/reported all fighters
-
+        if(reportList.equals(fighterNumber)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
