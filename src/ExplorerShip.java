@@ -6,6 +6,8 @@
 public class ExplorerShip extends Spaceship {
     private int scanRange; // The range within which the explorer ship can scan for nearby spaceships
     private boolean moveHorizontally = true; // Flag to track horizontal movement
+    private int Y;
+    private int X;
 
     /**
      * Constructs an ExplorerShip object with the specified attributes.
@@ -17,6 +19,8 @@ public class ExplorerShip extends Spaceship {
      */
     public ExplorerShip(String id, int x, int y, int scanRange) {
         super(id, x, y, SpaceshipType.EXPLORER);
+        int X=0;
+        X=x;
         this.scanRange = scanRange;
     }
 
@@ -30,6 +34,22 @@ public class ExplorerShip extends Spaceship {
     @Override
     public void move(GalacticMap galacticMap) {
         System.out.print("........Moving.......");
+
+        if(moveHorizontally){
+            if(galacticMap.isCollision(X,Y+1)) {
+                if (galacticMap.isValidMove(X, Y + 1)) {
+                    setY(Y + 1);
+                } else {
+                    System.out.println("“Moving Failed! out of bound x or y!");
+                }
+            }
+            else{
+                System.out.println("Moving Failed! the position is filled with another spaceship!");
+            }
+        }
+        else{
+            setX(X+1);
+        }
 
         // Implementation for explorer ship movement
         // they move in a zigzag pattern, alternating between horizontal and vertical movements.

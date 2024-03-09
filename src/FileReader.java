@@ -23,16 +23,19 @@ public class FileReader {
      * @throws RuntimeException if the file specified by fileName is not found or if an error occurs while reading the file
      *
      */
-    private static HashMap<Integer, String> shipType = new HashMap<>();
-    private static HashMap<Integer, String> shipID = new HashMap<>();
-    private static HashMap<Integer, Integer> shipX = new HashMap<>();
-    private static HashMap<Integer, Integer> shipY = new HashMap<>();
-    private static HashMap<Integer, Integer> damage = new HashMap<>();
-    private static HashMap<Integer, Integer> scan = new HashMap<>();
-    private static HashMap<Integer, Integer> CargoCapacity = new HashMap<>();
-    private static HashMap<Integer, Integer> CurrentCargo = new HashMap<>();
-    private static HashMap<Integer, Integer> TargetX = new HashMap<>();
-    private static HashMap<Integer, Integer> TargetY = new HashMap<>();
+    public static HashMap<Integer, String> shipType = new HashMap<>();
+    public static HashMap<Integer, String> shipID = new HashMap<>();
+    public static HashMap<Integer, Integer> shipX = new HashMap<>();
+    public static HashMap<Integer, Integer> shipY = new HashMap<>();
+    public static HashMap<Integer, Integer> damage = new HashMap<>();
+    public static HashMap<Integer, Integer> scan = new HashMap<>();
+    public static HashMap<Integer, Integer> CargoCapacity = new HashMap<>();
+    public static HashMap<Integer, Integer> CurrentCargo = new HashMap<>();
+    public static HashMap<Integer, Integer> TargetX = new HashMap<>();
+    public static HashMap<Integer, Integer> TargetY = new HashMap<>();
+    public static int totalFighters=0;
+    public static int totalExplorers=0;
+    public static int totalCargoships=0;
     private static int size;
     static GalacticMap map= new GalacticMap(size);
 
@@ -115,18 +118,21 @@ public class FileReader {
                             }
                             Spaceship cargo=new CargoShip(shipID.get(i),shipX.get(i),shipY.get(i),CargoCapacity.get(i),CurrentCargo.get(i),TargetX.get(i),TargetY.get(i));
                             map.placeSpaceship(cargo);
+                            totalCargoships++;
                         }
                         if(shipType.get(i).equals("FIGHTER")){
                             int d=Integer.parseInt(values[4]);
                             damage.put(i,d);
                             Spaceship fighter=new FighterShip(shipID.get(i),shipX.get(i),shipY.get(i),damage.get(i));
                             map.placeSpaceship(fighter);
+                            totalFighters++;
                         }
                         if(shipType.get(i).equals("EXPLORER")){
                             int s=Integer.parseInt(values[4]);
                             scan.put(i,s);
                             Spaceship explorer=new ExplorerShip(shipID.get(i),shipX.get(i),shipY.get(i),scan.get((i)));
                             map.placeSpaceship(explorer);
+                            totalExplorers++;
                         }
                     }
                     else{
