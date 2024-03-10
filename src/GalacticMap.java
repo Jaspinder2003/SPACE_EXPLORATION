@@ -182,6 +182,12 @@ public class GalacticMap {
      *
      */
     public void placeSpaceship(Spaceship spaceship) {
+        if(!isValidMove(spaceship.getX(), spaceship.getY())){
+            throw new IllegalArgumentException("Wrong input file! the position is filled with another item!");
+        }
+        if(!isCollision(spaceship.getX(), spaceship.getY())){
+            throw new IllegalArgumentException("Wrong input file! position is outside of the map!");
+        }
         grid[spaceship.getX()][spaceship.getY()]=spaceship;
     }
 
@@ -193,8 +199,25 @@ public class GalacticMap {
      */
     public boolean allCargoesReachedDestination() {
         // Check if all cargoes have reached their destination
-        return true;
-
+        int a=0;
+        int b=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j].getType()==SpaceshipType.CARGOSHIP){
+                    a++;
+                    CargoShip ship=(CargoShip) grid[i][j];
+                    if(ship.getX()==ship.getTargetX()&&ship.getY()==ship.getTargetY()){
+                        b++;
+                    }
+                }
+            }
+        }
+        if(a==b) {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     /**
@@ -204,7 +227,20 @@ public class GalacticMap {
      *
      */
     public boolean allExplorersAndCargoesRemoved() {
+        int a=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j].getType()==SpaceshipType.EXPLORER||grid[i][j].getType()==SpaceshipType.CARGOSHIP){
+                    a++;
+                }
+            }
+        }
+        if(a==0){
         return true;
+        }
+        else{
+            return false;
+        }
     }
 
     /**

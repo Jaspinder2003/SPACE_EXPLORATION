@@ -8,6 +8,7 @@ public class FighterShip extends Spaceship {
     private int damage;// The damage inflicted by the fighter ship during combat
     private int x;
     private int y;
+    private String id;
 
     /**
      * Constructs a FighterShip object with the specified attributes.
@@ -23,7 +24,7 @@ public class FighterShip extends Spaceship {
         this.damage=damage;
         this.x=x;
         this.y=y;
-
+        this.id=id;
     }
 
     /**
@@ -94,7 +95,20 @@ public class FighterShip extends Spaceship {
     @Override
     public void interact(GalacticMap galacticMap, Spaceship other) {
         System.out.println(".........interacting...........with.... " + other.getName());
-
+        if(other.getType()==SpaceshipType.FIGHTER){
+            System.out.println("fighters do not fight with fighters!");
+        }
+        else{
+            if(Math.abs(x- other.getX())<=damage&&Math.abs(y- other.getY())<=damage){
+                galacticMap.removeSpaceshipAt(other.getX(),other.getY());
+                System.out.println("FIGHTER" +id+ "destroyed spaceship:" +other.getType()+ other.getID());
+                System.out.println("Interaction Configuration");
+                System.out.println(galacticMap.toString());
+            }
+            else{
+                System.out.println("damage is less than the distance!");
+            }
+        }
         // Implementation for fighter ship interaction (e.g., combat)
 
     }

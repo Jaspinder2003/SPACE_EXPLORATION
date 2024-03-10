@@ -50,7 +50,11 @@ public class CargoShip extends Spaceship {
 
         System.out.print("........Moving.......");
         if(checkX>0){
+
             change(galacticMap,X-1,Y);
+        }
+        else{
+            change(galacticMap,X+1,Y);
         }
         // CargoShip-specific movement logic
 
@@ -64,9 +68,31 @@ public class CargoShip extends Spaceship {
      */
     @Override
     public void interact(GalacticMap galacticMap, Spaceship other) {
-
+        double x;
         System.out.println(".........interacting...........with.... " + other.getName());
-
+        if(other.getX()==X && other.getY()==Y){
+            System.out.println("CargoShip cannot interact with itself");
+        }
+        else if(other.getType()==SpaceshipType.FIGHTER){
+            System.out.println("CargoShip cannot interact with FIGHTER");
+        }
+        else if(other.getType()==SpaceshipType.EXPLORER){
+            System.out.println("CargoShip cannot interact with EXPLORER");
+        }
+        else if(other.getType()==SpaceshipType.CARGOSHIP){
+            CargoShip ship=(CargoShip) other;
+            double cc=ship.currentCargo;
+            if(cc<currentCargo){
+                x=(currentCargo-cc)/2;
+                ship.loadCargo(x);
+                unloadCargo(x);
+            }
+            else if (cc>currentCargo) {
+               x=(cc-currentCargo)/2;
+               ship.unloadCargo(x);
+               loadCargo(x);
+            }
+        }
         // CargoShip interaction logic
     }
 
@@ -76,7 +102,9 @@ public class CargoShip extends Spaceship {
      * ...........
      */
     public void loadCargo(double cargoAmount) {
-
+        if(currentCargo+cargoAmount<=cargoCapacity){
+            currentCargo=currentCargo+cargoAmount;
+        }
     }
 
     /**
@@ -85,7 +113,9 @@ public class CargoShip extends Spaceship {
      * ..............
      */
     public void unloadCargo(double cargoAmount) {
-
+        if(cargoAmount<=currentCargo){
+            currentCargo=currentCargo-cargoAmount;
+        }
     }
 
     /**

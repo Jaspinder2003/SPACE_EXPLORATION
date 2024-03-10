@@ -56,8 +56,26 @@ public class ExplorerShip extends Spaceship {
     @Override
     public void interact(GalacticMap galacticMap, Spaceship other) {
         System.out.println(".........interacting...........with.... " + other.getName());
+        if(X==other.getX()&&Y==other.getY()){
+            System.out.println("the spaceship cannot interact with itself");
+        }
+        else {
+            if (Math.abs(X - other.getX()) <= scanRange && Math.abs(Y = other.getY()) <= scanRange) {
+                int distance;
+                if (X - other.getX() > Y - other.getY()) {
+                    distance = X - other.getX();
+                } else if (X - other.getX() < Y - other.getY()) {
+                    distance = Y - other.getY();
+                } else {
+                    distance = X - other.getX();
+                }
+                System.out.println("Found: " + other.getType() + other.getID() + "at distnace " + distance);
+            } else {
+                System.out.println("Spaceship: " + other.getType() + other.getID()+"is not in the scan-range");
+            }
+            // Implementation for explorer ship interaction
 
-        // Implementation for explorer ship interaction
+        }
     }
     private void change(GalacticMap galacticMap,int newX,int newY){
         Spaceship f= galacticMap.getSpaceshipAt(X,Y);

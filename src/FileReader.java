@@ -45,11 +45,8 @@ public class FileReader {
         try {
             File file = new File(fileName);
             file_reader = new java.io.FileReader(file);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
         BufferedReader br = new BufferedReader(file_reader);
-        try{
+
             String line1=br.readLine();
 
             try {
