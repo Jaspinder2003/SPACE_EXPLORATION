@@ -7,6 +7,11 @@ import java.util.Random;
  * It initializes the game, executes the game loop, and checks for end conditions.
  * @author Parisa Daeijavad
  */
+/**
+ * Jaspinder Singh Maan
+ * T-15
+ * 11-3-2023
+ */
 public class Game {
     /**
      * The main method initializes the game, executes the game loop, and checks for end conditions.

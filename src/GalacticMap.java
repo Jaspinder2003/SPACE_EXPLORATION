@@ -1,6 +1,10 @@
 import java.util.HashSet;
 import java.util.Random;
-
+/**
+ * Jaspinder Singh Maan
+ * T-15
+ * 11-3-2023
+ */
 /**
  * The GalacticMap class represents the grid-based map of the galactic space.
  * It stores information about the positions of spaceships and provides methods

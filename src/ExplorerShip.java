@@ -3,6 +3,11 @@
  * It inherits from the Spaceship class and defines specific movement and interaction behaviors.
  * @author Parisa Daeijavad
  */
+/**
+ * Jaspinder Singh Maan
+ * T-15
+ * 11-3-2023
+ */
 public class ExplorerShip extends Spaceship {
     private int scanRange; // The range within which the explorer ship can scan for nearby spaceships
     private boolean moveHorizontally = true; // Flag to track horizontal movement

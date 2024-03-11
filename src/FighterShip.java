@@ -4,6 +4,11 @@ import java.util.Random;
  * It inherits from the Spaceship class and defines specific movement and interaction behaviors.
  * @author Parisa Daeijavad
  */
+/**
+ * Jaspinder Singh Maan
+ * T-15
+ * 11-3-2023
+ */
 public class FighterShip extends Spaceship {
     private int damage;// The damage inflicted by the fighter ship during combat
     ;

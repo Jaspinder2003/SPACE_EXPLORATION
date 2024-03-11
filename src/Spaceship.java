@@ -3,6 +3,11 @@
  * It defines common attributes and behaviors for different types of spaceships.
  * @author Parisa Daeijavad
  */
+/**
+ * Jaspinder Singh Maan
+ * T-15
+ * 11-3-2023
+ */
 public abstract class Spaceship {
 
     // attributes:

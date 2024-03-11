@@ -3,6 +3,11 @@
  * It inherits from the Spaceship class and defines specific movement, interaction, and cargo management behaviors.
  * @author Parisa Daeijavad
  */
+/**
+ * Jaspinder Singh Maan
+ * T-15
+ * 11-3-2023
+ */
 public class CargoShip extends Spaceship {
 
     private double cargoCapacity; // Maximum cargo capacity of the CargoShip
