@@ -56,17 +56,23 @@ public class CargoShip extends Spaceship {
             System.out.print("........Moving.......");
             if (checkX > 0) {
                 if(galacticMap.getSpaceshipAt(X-1,Y)==null){
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X-1)+","+ Y+")\n");
                 change(galacticMap, X - 1, Y);} else if (galacticMap.getSpaceshipAt(X-1,Y)!=null&&Y>targetY) {
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X)+","+ (Y-1)+")\n");
                     change(galacticMap,X,Y-1);
                 } else if (galacticMap.getSpaceshipAt(X-1,Y)!=null&&Y<targetY){
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X)+","+ (Y+1)+")\n");
                     change(galacticMap,X,Y+1);
                 }
 
             } else if(checkX<0) {
                 if(galacticMap.getSpaceshipAt(X+1,Y)==null){
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X+1)+","+ Y+")\n");
                     change(galacticMap, X + 1, Y);} else if (galacticMap.getSpaceshipAt(X+1,Y)!=null&&Y>targetY) {
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X)+","+ (Y-1)+")\n");
                     change(galacticMap,X,Y-1);
                 } else if (galacticMap.getSpaceshipAt(X+1,Y)!=null&&Y<targetY){
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X)+","+ (Y+1)+")\n");
                     change(galacticMap,X,Y+1);
                 }
             }
@@ -80,6 +86,7 @@ public class CargoShip extends Spaceship {
             }
             // CargoShip-specific movement logic
         }
+        System.out.println("Move Configuration\n"+galacticMap.toString());
     }
 
     /**
@@ -106,14 +113,27 @@ public class CargoShip extends Spaceship {
             double cc=ship.currentCargo;
             if(cc<currentCargo){
                 x=(currentCargo-cc)/2;
+                if(ship.currentCargo+x>ship.cargoCapacity){
+                    System.out.println("Cargo capacity exceeded! Cannot load cargo onto C-" + ship.getID());
+                }
+                else{
                 ship.loadCargo(x);
-                unloadCargo(x);
+                if(currentCargo<x){
+                    System.out.println("Cannot unload more cargo than what's currently onboard.");
+                }else{
+                unloadCargo(x);}}
             }
             else if (cc>currentCargo) {
                x=(cc-currentCargo)/2;
+               if(ship.currentCargo<x){
+                   System.out.println("Cannot unload more cargo than what's currently onboard.");
+               }else{
                ship.unloadCargo(x);
-               loadCargo(x);
-            }
+               if(currentCargo+x>cargoCapacity){
+                   System.out.println("Cargo capacity exceeded! Cannot load cargo onto C-" + id);
+               }else{
+               loadCargo(x);}
+            }}
         }
         // CargoShip interaction logic
     }
@@ -188,7 +208,6 @@ public class CargoShip extends Spaceship {
     private void change(GalacticMap galacticMap,int newX,int newY){
         Spaceship f= galacticMap.getSpaceshipAt(X,Y);
         galacticMap.moveSpaceshipTo(f,newX,newY);
-        galacticMap.removeSpaceshipAt(X,Y);
     }
 }
 

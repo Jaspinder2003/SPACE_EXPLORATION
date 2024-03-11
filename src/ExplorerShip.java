@@ -8,6 +8,7 @@ public class ExplorerShip extends Spaceship {
     private boolean moveHorizontally = true; // Flag to track horizontal movement
     private int Y;
     private int X;
+    private String id;
 
     /**
      * Constructs an ExplorerShip object with the specified attributes.
@@ -22,6 +23,7 @@ public class ExplorerShip extends Spaceship {
         X=x;
         Y=y;
         this.scanRange = scanRange;
+        this.id=id;
     }
 
     /**
@@ -36,14 +38,16 @@ public class ExplorerShip extends Spaceship {
         System.out.print("........Moving.......");
 
         if(moveHorizontally){
+            System.out.println("Start moving EXPLORER"+ id +"to the position: "+"("+X+","+ (Y+1)+")\n");
             change(galacticMap,X,Y+1);
             moveHorizontally=false;
         }
         else{
+            System.out.println("Start moving EXPLORER"+ id +"to the position: "+"("+(X+1)+","+ Y+")\n");
             change(galacticMap,X+1,Y);
             moveHorizontally=true;
         }
-
+System.out.println("Move Configuration\n"+galacticMap.toString());
         // Implementation for explorer ship movement
         // they move in a zigzag pattern, alternating between horizontal and vertical movements.
 
@@ -58,22 +62,22 @@ public class ExplorerShip extends Spaceship {
     @Override
     public void interact(GalacticMap galacticMap, Spaceship other) {
         System.out.println(".........interacting...........with.... " + other.getName());
+
         if(X==other.getX()&&Y==other.getY()){
             System.out.println("the spaceship cannot interact with itself");
         }
         else {
-            if (Math.abs(X - other.getX()) <= scanRange && Math.abs(Y = other.getY()) <= scanRange) {
-                int distance;
-                if (X - other.getX() > Y - other.getY()) {
-                    distance = X - other.getX();
-                } else if (X - other.getX() < Y - other.getY()) {
-                    distance = Y - other.getY();
-                } else {
-                    distance = X - other.getX();
+            System.out.println("Start exploring: "+other.getName());
+            if (calculateDistance(other)<=scanRange) {
+                int distance=calculateDistance(other);
+
+                System.out.println("Found: "+other.getName()+ " at distance " + distance);
+                if(other.getType().equals(SpaceshipType.FIGHTER)){
+                    FighterShip ship=(FighterShip) other;
+
                 }
-                System.out.println("Found: " + other.getType() + other.getID() + "at distnace " + distance);
             } else {
-                System.out.println("Spaceship: " + other.getType() + other.getID()+"is not in the scan-range");
+                System.out.println("Spaceship: " + other.getType() + other.getID()+" is not in the scan-range");
             }
             // Implementation for explorer ship interaction
 
@@ -82,6 +86,6 @@ public class ExplorerShip extends Spaceship {
     private void change(GalacticMap galacticMap,int newX,int newY){
         Spaceship f= galacticMap.getSpaceshipAt(X,Y);
         galacticMap.moveSpaceshipTo(f,newX,newY);
-        galacticMap.removeSpaceshipAt(X,Y);
+
     }
 }

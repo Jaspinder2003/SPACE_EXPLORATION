@@ -86,19 +86,20 @@ public class GalacticMap {
          */
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[0].length;j++){
+                Spaceship ship=getSpaceshipAt(i,j);
                 /**
                  * checking if the specified location at the grid has a spaceship object
                  * and if it does what type it is
                  */
                 if(getSpaceshipAt(i,j)!=null){
 
-                    if(getSpaceshipAt(i, j).getID().charAt(0) == 'f'){
+                    if(ship.getType().equals(SpaceshipType.FIGHTER)){
                         st=st+"[ "+"F-"+getSpaceshipAt(i, j).getID()+" ]";
                     }
-                    else if(getSpaceshipAt(i, j).getID().charAt(0) == 'e'){
+                    else if(ship.getType().equals(SpaceshipType.EXPLORER)){
                         st=st+"[ "+"E-"+getSpaceshipAt(i, j).getID()+" ]";
                     }
-                    else if (getSpaceshipAt(i, j).getID().charAt(0) == 'c') {
+                    else if (ship.getType().equals(SpaceshipType.CARGOSHIP)) {
                         st=st+"[ "+"C-"+getSpaceshipAt(i, j).getID()+" ]";
                     }
                 }
@@ -133,9 +134,12 @@ public class GalacticMap {
     public void moveSpaceshipTo(Spaceship spaceship, int newX, int newY) {
         if(isValidMove(newX,newY)){
             if(!isCollision(newX,newY)){
-                spaceship.setX(newX);
-                spaceship.setY(newY);
-                placeSpaceship(spaceship);
+                if(spaceship!=null) {
+                    removeSpaceshipAt(spaceship.getX(), spaceship.getY());
+                    spaceship.setX(newX);
+                    spaceship.setY(newY);
+                    placeSpaceship(spaceship);
+                }
             }
             else{
                 System.out.println("Moving Failed! the position is filled with another spaceship!");
@@ -153,7 +157,7 @@ public class GalacticMap {
      */
     private boolean isValidMove(int newX, int newY) {
         // Check if the new position is within the grid boundaries
-        if(newX<= grid.length-1&&newY<=grid[0].length-1){
+        if(newX <= grid.length-1&&newY<=grid[0].length-1){
             return true;
         }
         else{
@@ -208,13 +212,14 @@ public class GalacticMap {
         int b=0;
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]!=null){
                 if(grid[i][j].getType()==SpaceshipType.CARGOSHIP){
                     a++;
                     CargoShip ship=(CargoShip) grid[i][j];
                     if(ship.getX()==ship.getTargetX()&&ship.getY()==ship.getTargetY()){
                         b++;
                     }
-                }
+                }}
             }
         }
         if(a==b) {
@@ -235,9 +240,10 @@ public class GalacticMap {
         int a=0;
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]!=null){
                 if(grid[i][j].getType()==SpaceshipType.EXPLORER||grid[i][j].getType()==SpaceshipType.CARGOSHIP){
                     a++;
-                }
+                }}
             }
         }
         if(a==0){
@@ -257,7 +263,7 @@ public class GalacticMap {
     public boolean allFightersReported() {
         // Check if explorers have interacted/reported all fighters
         if(reportList.size()==fighterNumber){
-            return true;
+            return false;
         }
         else{
             return false;

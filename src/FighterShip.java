@@ -82,7 +82,7 @@ public class FighterShip extends Spaceship {
                 break;
         }
         // Implementation for fighter ship movement
-
+System.out.println("Move Configuration\n"+galacticMap.toString());
     }
 
     /**
@@ -99,9 +99,9 @@ public class FighterShip extends Spaceship {
             System.out.println("fighters do not fight with fighters!");
         }
         else{
-            if(Math.abs(x- other.getX())<=damage&&Math.abs(y- other.getY())<=damage){
+            if(calculateDistance(other)<=damage){
                 galacticMap.removeSpaceshipAt(other.getX(),other.getY());
-                System.out.println("FIGHTER" +id+ "destroyed spaceship:" +other.getType()+ other.getID());
+                System.out.println( getName()+ "destroyed spaceship:" +other.getType()+ other.getID());
                 System.out.println("Interaction Configuration");
                 System.out.println(galacticMap.toString());
             }
@@ -115,7 +115,7 @@ public class FighterShip extends Spaceship {
     private void change(GalacticMap galacticMap,int newX,int newY){
         Spaceship f= galacticMap.getSpaceshipAt(x,y);
         galacticMap.moveSpaceshipTo(f,newX,newY);
-        galacticMap.removeSpaceshipAt(x,y);
+
     }
 }
 

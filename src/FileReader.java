@@ -24,10 +24,15 @@ public class FileReader {
     static GalacticMap map;
 
     public static GalacticMap readFromFile(String fileName) {
-        map = new GalacticMap(size);
+
 
         try (Scanner scanner = new Scanner(new File(fileName))) {
-            size = scanner.nextInt();
+            String line1=scanner.nextLine();
+            try{size = Integer.parseInt(line1);}
+            catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid data format: Unable to parse numeric value", e);
+            }
+            map = new GalacticMap(size);
             scanner.nextLine();
             int i = 1;
             HashSet<String> id = new HashSet<>();
@@ -116,8 +121,6 @@ public class FileReader {
         }
          catch (IOException e) {
             throw new UncheckedIOException(new IOException("file not found: " + fileName, e));
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid data format: Unable to parse numeric value", e);
         }
 
         return map;
