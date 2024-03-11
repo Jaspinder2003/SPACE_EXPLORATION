@@ -37,9 +37,11 @@ public class ExplorerShip extends Spaceship {
 
         if(moveHorizontally){
             change(galacticMap,X,Y+1);
+            moveHorizontally=false;
         }
         else{
             change(galacticMap,X+1,Y);
+            moveHorizontally=true;
         }
 
         // Implementation for explorer ship movement

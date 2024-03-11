@@ -79,7 +79,8 @@ public class GalacticMap {
      */
     @Override
     public String toString() {
-        String st=null;//initialized a string st with null
+        String st="";//initialized a string st with null
+
         /**
          * looping through the whole grid
          */
@@ -90,21 +91,25 @@ public class GalacticMap {
                  * and if it does what type it is
                  */
                 if(getSpaceshipAt(i,j)!=null){
+
                     if(getSpaceshipAt(i, j).getID().charAt(0) == 'f'){
-                        st="[ "+"F-"+getSpaceshipAt(i, j).getID()+" ]";
+                        st=st+"[ "+"F-"+getSpaceshipAt(i, j).getID()+" ]";
                     }
                     else if(getSpaceshipAt(i, j).getID().charAt(0) == 'e'){
-                        st="[ "+"E-"+getSpaceshipAt(i, j).getID()+" ]";
+                        st=st+"[ "+"E-"+getSpaceshipAt(i, j).getID()+" ]";
                     }
                     else if (getSpaceshipAt(i, j).getID().charAt(0) == 'c') {
-                        st="[ "+"C-"+getSpaceshipAt(i, j).getID()+" ]";
+                        st=st+"[ "+"C-"+getSpaceshipAt(i, j).getID()+" ]";
                     }
                 }
                 else{
-                    st="[         ]";
+
+                        st=st+"[         ]";
+
                 }
             }
-            st=st+"\n";
+            if(i!=grid.length-1){
+            st=st+"\n";}
         }
         return st;
     }
@@ -127,7 +132,7 @@ public class GalacticMap {
      */
     public void moveSpaceshipTo(Spaceship spaceship, int newX, int newY) {
         if(isValidMove(newX,newY)){
-            if(isCollision(newX,newY)){
+            if(!isCollision(newX,newY)){
                 spaceship.setX(newX);
                 spaceship.setY(newY);
                 placeSpaceship(spaceship);
@@ -148,7 +153,7 @@ public class GalacticMap {
      */
     private boolean isValidMove(int newX, int newY) {
         // Check if the new position is within the grid boundaries
-        if(newX< grid.length-1&&newY<grid[0].length-1){
+        if(newX<= grid.length-1&&newY<=grid[0].length-1){
             return true;
         }
         else{
@@ -167,10 +172,10 @@ public class GalacticMap {
     private boolean isCollision(int newX, int newY) {
         // Check if the new position is occupied by another spaceship
             if(grid[newX][newY]!=null){
-                return false;
+                return true;
             }
             else{
-                return true;
+                return false;
             }
     }
 
@@ -183,10 +188,10 @@ public class GalacticMap {
      */
     public void placeSpaceship(Spaceship spaceship) {
         if(!isValidMove(spaceship.getX(), spaceship.getY())){
-            throw new IllegalArgumentException("Wrong input file! the position is filled with another item!");
-        }
-        if(!isCollision(spaceship.getX(), spaceship.getY())){
             throw new IllegalArgumentException("Wrong input file! position is outside of the map!");
+        }
+        if(isCollision(spaceship.getX(), spaceship.getY())){
+            throw new IllegalArgumentException("Wrong input file! the position is filled with another item!");
         }
         grid[spaceship.getX()][spaceship.getY()]=spaceship;
     }
