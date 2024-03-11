@@ -15,6 +15,7 @@ public class CargoShip extends Spaceship {
     private int checkX=0;
 
     private boolean reachedDestination; // Indicates if the cargo has reached its destination
+    String id="";
 
     /**
      * Constructs a CargoShip object with the specified attributes.
@@ -37,6 +38,7 @@ public class CargoShip extends Spaceship {
         this.currentCargo=currentCargo;
         this.cargoCapacity=cargoCapacity;
         checkX=X-targetX;
+        this.id=id;
     }
 
     /**
@@ -47,17 +49,37 @@ public class CargoShip extends Spaceship {
      */
     @Override
     public void move(GalacticMap galacticMap) {
-
-        System.out.print("........Moving.......");
-        if(checkX>0){
-
-            change(galacticMap,X-1,Y);
+        if(X==targetX&&Y==targetY){
+            System.out.println("CargoShip: c-"+id.charAt(1)+id.charAt(2)+id.charAt(3)+id.charAt(4)+" is already in destination");
         }
-        else{
-            change(galacticMap,X+1,Y);
-        }
-        // CargoShip-specific movement logic
+        else {
+            System.out.print("........Moving.......");
+            if (checkX > 0) {
+                if(galacticMap.getSpaceshipAt(X-1,Y)==null){
+                change(galacticMap, X - 1, Y);} else if (galacticMap.getSpaceshipAt(X-1,Y)!=null&&Y>targetY) {
+                    change(galacticMap,X,Y-1);
+                } else if (galacticMap.getSpaceshipAt(X-1,Y)!=null&&Y<targetY){
+                    change(galacticMap,X,Y+1);
+                }
 
+            } else if(checkX<0) {
+                if(galacticMap.getSpaceshipAt(X+1,Y)==null){
+                    change(galacticMap, X + 1, Y);} else if (galacticMap.getSpaceshipAt(X+1,Y)!=null&&Y>targetY) {
+                    change(galacticMap,X,Y-1);
+                } else if (galacticMap.getSpaceshipAt(X+1,Y)!=null&&Y<targetY){
+                    change(galacticMap,X,Y+1);
+                }
+            }
+
+            else{
+                if(Y<targetY){
+                    change(galacticMap,X,Y+1);
+                } else if (Y>targetY) {
+                    change(galacticMap,X,Y-1);
+                }
+            }
+            // CargoShip-specific movement logic
+        }
     }
 
     /**
