@@ -6,9 +6,6 @@
 public class ExplorerShip extends Spaceship {
     private int scanRange; // The range within which the explorer ship can scan for nearby spaceships
     private boolean moveHorizontally = true; // Flag to track horizontal movement
-    private int Y;
-    private int X;
-    private String id;
 
     /**
      * Constructs an ExplorerShip object with the specified attributes.
@@ -20,10 +17,10 @@ public class ExplorerShip extends Spaceship {
      */
     public ExplorerShip(String id, int x, int y, int scanRange) {
         super(id, x, y, SpaceshipType.EXPLORER);
-        X=x;
-        Y=y;
         this.scanRange = scanRange;
-        this.id=id;
+/**
+ * used to inherit from the super class
+ */
     }
 
     /**
@@ -36,15 +33,17 @@ public class ExplorerShip extends Spaceship {
     @Override
     public void move(GalacticMap galacticMap) {
         System.out.print("........Moving.......");
-
+        /**
+         * used to check where the spaceship will move according to the logic given in the assignment
+         */
         if(moveHorizontally){
-            System.out.println("Start moving EXPLORER"+ id +"to the position: "+"("+X+","+ (Y+1)+")\n");
-            change(galacticMap,X,Y+1);
+            System.out.println("Start moving EXPLORER"+ getID() +"to the position: "+"("+getX()+","+ (getY()+1)+")\n");
+            change(galacticMap,getX(),getY()+1);
             moveHorizontally=false;
         }
         else{
-            System.out.println("Start moving EXPLORER"+ id +"to the position: "+"("+(X+1)+","+ Y+")\n");
-            change(galacticMap,X+1,Y);
+            System.out.println("Start moving EXPLORER"+ getID() +"to the position: "+"("+(getX()+1)+","+ getX()+")\n");
+            change(galacticMap,getX()+1,getY());
             moveHorizontally=true;
         }
 System.out.println("Move Configuration\n"+galacticMap.toString());
@@ -63,7 +62,10 @@ System.out.println("Move Configuration\n"+galacticMap.toString());
     public void interact(GalacticMap galacticMap, Spaceship other) {
         System.out.println(".........interacting...........with.... " + other.getName());
 
-        if(X==other.getX()&&Y==other.getY()){
+        /**
+         * used to explore the surroundings upto the scan range.
+         */
+        if(getX()==other.getX()&&getY()==other.getY()){
             System.out.println("the spaceship cannot interact with itself");
         }
         else {
@@ -74,7 +76,7 @@ System.out.println("Move Configuration\n"+galacticMap.toString());
                 System.out.println("Found: "+other.getName()+ " at distance " + distance);
                 if(other.getType().equals(SpaceshipType.FIGHTER)){
                     FighterShip ship=(FighterShip) other;
-
+                    galacticMap.AddReportedFighter(ship);
                 }
             } else {
                 System.out.println("Spaceship: " + other.getType() + other.getID()+" is not in the scan-range");
@@ -84,8 +86,10 @@ System.out.println("Move Configuration\n"+galacticMap.toString());
         }
     }
     private void change(GalacticMap galacticMap,int newX,int newY){
-        Spaceship f= galacticMap.getSpaceshipAt(X,Y);
+        Spaceship f= galacticMap.getSpaceshipAt(getX(),getY());
         galacticMap.moveSpaceshipTo(f,newX,newY);
-
+        /**
+         * again the same function is used to change the coordinates of the spaceship
+         */
     }
 }

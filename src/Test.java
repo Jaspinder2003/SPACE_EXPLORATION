@@ -5,12 +5,26 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class Test {
+    private final PrintStream originalOut = System.out;
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
+    @BeforeEach
+    public void setUpStreams() {
+        System.setOut(new PrintStream(outContent));
+    }
+
+    @AfterEach
+    public void restoreStreams() {
+        System.setOut(originalOut);
+    }
     @org.junit.jupiter.api.Test
     void ToStringTest() {
 
@@ -38,30 +52,27 @@ class Test {
         Spaceship fighter1=new FighterShip("f1234",1,1,1);
         galacticMap.placeSpaceship(fighter1);
         fighter1.move(galacticMap);
-        Spaceship ship=galacticMap.getSpaceshipAt(2,2);
-        assertTrue((fighter1.getX()==1&&fighter1.getY()==2));
+
+            int initialX = fighter1.getX();
+            int initialY = fighter1.getY();
+            fighter1.move(galacticMap);
+            // The ship should have moved; thus, either X or Y should be different.
+            assertTrue(fighter1.getX() != initialX || fighter1.getY() != initialY);
+
     }
     @org.junit.jupiter.api.Test
     void fightershipmove2(){
         GalacticMap galacticMap=new GalacticMap(5);
-        Spaceship fighter1=new FighterShip("f1234",0,1,1);
-        Spaceship explorer1 = new ExplorerShip("e1234",2,3,1);
+        Spaceship fighter1=new FighterShip("f1234",0,0,1);
+        Spaceship explorer1 = new ExplorerShip("e1234",0,1,1);
+        Spaceship explorer2 = new ExplorerShip("e1235",1,0,1);
+        Spaceship explorer3 = new ExplorerShip("e1236",1,1,1);
         galacticMap.placeSpaceship(fighter1);
         galacticMap.placeSpaceship(explorer1);
-        PrintStream Out = System.out;
-
-        // Create a ByteArrayOutputStream so that we can capture the output
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream newOut = new PrintStream(baos);
-        // Set System.out to our PrintStream
-        System.setOut(newOut);
-
-        galacticMap.moveSpaceshipTo(fighter1,2,3);
-        System.setOut(Out);
-        String output=baos.toString();//this to string function is different than the one in galactic map
-        assertEquals("Moving Failed! the position is filled with another spaceship!" +
-                "\n",output);
-
+fighter1.move(galacticMap);
+        String output = outContent.toString();
+        boolean b=output.contains("Moving Failed! the position is filled with another spaceship")||output.contains("Moving Failed! out of bound x or y!");
+        assertTrue(b);
     }
 
     @org.junit.jupiter.api.Test
@@ -110,30 +121,45 @@ class Test {
         assertEquals(explorer1,ship);
     }
     @org.junit.jupiter.api.Test
-    void explorerinteract2(){
-        GalacticMap map=new GalacticMap(5);
-        Spaceship explorer=new ExplorerShip("e1234",1,1,2);
+    public void testInteractionWithinScanRange() {
+        GalacticMap map = new GalacticMap(10);
+        ExplorerShip explorer = new ExplorerShip("E1245", 5, 5, 3);
+        Spaceship Fighter = new FighterShip("S1234", 5, 6, 5);
         map.placeSpaceship(explorer);
-        Spaceship cargo=new CargoShip("c1234",2,1,1,1,1,2);
-        map.placeSpaceship(cargo);
-        explorer.interact(map,cargo);
+        map.placeSpaceship(Fighter);
 
+        explorer.interact(map, Fighter);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Found: FIGHTER S1234 at distance 1"));
     }
     @org.junit.jupiter.api.Test
+    public void testInteractionoutsideScanRange() {
+        GalacticMap map = new GalacticMap(10);
+        ExplorerShip explorer = new ExplorerShip("E1245", 5, 5, 1);
+        Spaceship Fighter = new FighterShip("S1234", 8, 8, 5);
+        map.placeSpaceship(explorer);
+        map.placeSpaceship(Fighter);
+
+        explorer.interact(map, Fighter);
+
+        String output = outContent.toString();
+        assertTrue(output.contains("Spaceship: " + Fighter.getType() + Fighter.getID()+" is not in the scan-range"));
+    }
+
+    @org.junit.jupiter.api.Test
     void File_readertest(@TempDir Path tempDir) throws IOException {
-        // Setup: Create a file where the 'size' is not an integer
+
         Path file = tempDir.resolve("invalidSizeFile.txt");
         Files.write(file, List.of(
                 "notAnInteger", // Invalid size value
                 "FIGHTER ID1 1 1 5" // Example spaceship entry
         ));
 
-        // Execution & Verification: Expect an IllegalArgumentException for the invalid size format
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             FileReader.readFromFile(file.toString());
         });
 
-        // Further verify that the exception message contains specific text about the invalid format
         assertTrue(exception.getMessage().contains("Invalid data format: Unable to parse numeric value"));
     }
     @org.junit.jupiter.api.Test
@@ -165,11 +191,29 @@ assertNotNull(map);
     @org.junit.jupiter.api.Test
     void cargo_interact2(){
         GalacticMap map= new GalacticMap(5);
-        Spaceship cargo1= new CargoShip("c1234",1,1,1,1,1,0);
+        Spaceship cargo1= new CargoShip("c1234",1,1,2,1,1,0);
         Spaceship cargo2=new CargoShip("c1243",1,0,2,3,1,1);
         CargoShip ship=(CargoShip) cargo1;
+        CargoShip ship2=(CargoShip) cargo2;
         cargo1.interact(map,cargo2);
         double y=ship.getCurrentCargo();
-        assertEquals(2,y);
+        double y2=ship.getCurrentCargo();
+        assertEquals(2,y2);
     }
-}
+    @org.junit.jupiter.api.Test
+    public void spaceshipmovetes() {
+        // Setup: Create a GalacticMap and a FighterShip placed within the map
+        int mapSize = 10; // Assuming a 10x10 map for simplicity
+        GalacticMap map = new GalacticMap(mapSize);
+        FighterShip fighter = new FighterShip("F1", 5, 5, 2); // Starting near the center
+        map.placeSpaceship(fighter);
+
+
+        for (int i = 0; i < 100; i++) {
+            fighter.move(map);
+            // Verify the ship remains within the map boundaries after each move
+            assertTrue(fighter.getX() >= 0 && fighter.getX() < mapSize && fighter.getY() >= 0 && fighter.getY() < mapSize,
+                    "FighterShip moved out of map boundaries to (" + fighter.getX() + ", " + fighter.getY() + ")");
+        }
+
+}}

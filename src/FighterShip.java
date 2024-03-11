@@ -6,9 +6,7 @@ import java.util.Random;
  */
 public class FighterShip extends Spaceship {
     private int damage;// The damage inflicted by the fighter ship during combat
-    private int x;
-    private int y;
-    private String id;
+    ;
 
     /**
      * Constructs a FighterShip object with the specified attributes.
@@ -22,9 +20,7 @@ public class FighterShip extends Spaceship {
         super(id,x,y,SpaceshipType.FIGHTER);
         // Initialize FighterShip attributes
         this.damage=damage;
-        this.x=x;
-        this.y=y;
-        this.id=id;
+
     }
 
     /**
@@ -48,37 +44,40 @@ public class FighterShip extends Spaceship {
     public void move(GalacticMap galacticMap) {
         System.out.print("........Moving.......");
         int r=getRandomDirection();
+        /**
+         * used a switch case statement to see where the fighter ship will go
+         */
         switch (r){
             case 0://moving up
-                change(galacticMap,x-1,y);
+                change(galacticMap,getX()-1,getY());
                 break;
 
             case 1://moving down
-                change(galacticMap,x+1,y);
+                change(galacticMap,getX()+1,getY());
                 break;
 
             case 2://moving left
-                change(galacticMap,x,y-1);
+                change(galacticMap,getX(),getY()-1);
                 break;
 
             case 3://moving right
-                change(galacticMap,x,y+1);
+                change(galacticMap,getX(),getY()+1);
                 break;
 
             case 4://moving downright
-                change(galacticMap,x+1,y+1);
+                change(galacticMap,getX()+1,getY()+1);
                 break;
 
             case 5://moving downleft
-                change(galacticMap,x+1,y-1);
+                change(galacticMap,getX()+1,getY()-1);
                 break;
 
             case 6://moving upright
-                change(galacticMap,x-1,y+1);
+                change(galacticMap,getX()-1,getY()+1);
                 break;
 
             case 7://moving upleft
-                change(galacticMap,x-1,y-1);
+                change(galacticMap,getX()-1,getY()-1);
                 break;
         }
         // Implementation for fighter ship movement
@@ -94,6 +93,10 @@ System.out.println("Move Configuration\n"+galacticMap.toString());
      */
     @Override
     public void interact(GalacticMap galacticMap, Spaceship other) {
+        /**
+         * interacts also removes the spaceship that it chooses to interact with and
+         * that is within the damage range
+         */
         System.out.println(".........interacting...........with.... " + other.getName());
         if(other.getType()==SpaceshipType.FIGHTER){
             System.out.println("fighters do not fight with fighters!");
@@ -101,7 +104,7 @@ System.out.println("Move Configuration\n"+galacticMap.toString());
         else{
             if(calculateDistance(other)<=damage){
                 galacticMap.removeSpaceshipAt(other.getX(),other.getY());
-                System.out.println( getName()+ "destroyed spaceship:" +other.getType()+ other.getID());
+                System.out.println( getName()+ "destroyed spaceship:" +other.getType()+" "+ other.getID());
                 System.out.println("Interaction Configuration");
                 System.out.println(galacticMap.toString());
             }
@@ -113,9 +116,11 @@ System.out.println("Move Configuration\n"+galacticMap.toString());
 
     }
     private void change(GalacticMap galacticMap,int newX,int newY){
-        Spaceship f= galacticMap.getSpaceshipAt(x,y);
+        Spaceship f= galacticMap.getSpaceshipAt(getX(),getY());
         galacticMap.moveSpaceshipTo(f,newX,newY);
-
+/**
+ * a function used to change the coordinates of the fighter spaceship
+ */
     }
 }
 

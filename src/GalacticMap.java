@@ -38,7 +38,17 @@ public class GalacticMap {
      * Adds one to the count of fighters in the GalacticMap.
      */
     public void addOneFighter() {
-        fighterNumber++;
+        /**
+         * used to check for the number of fighters present
+         */
+        for(int i=0;i<= grid.length;i++){
+         for(int j=0;j<grid[0].length;j++){
+             if(grid[i][j].getType().equals(SpaceshipType.FIGHTER)){
+                 fighterNumber++;
+             }
+         }
+        }
+
     }
 
     /**
@@ -146,7 +156,7 @@ public class GalacticMap {
             }
         }
         else{
-            System.out.println("“Moving Failed! out of bound x or y!");
+            System.out.println("Moving Failed! out of bound x or y!");
         }
     }
     /**
@@ -157,11 +167,11 @@ public class GalacticMap {
      */
     private boolean isValidMove(int newX, int newY) {
         // Check if the new position is within the grid boundaries
-        if(newX <= grid.length-1&&newY<=grid[0].length-1){
-            return true;
-        }
-        else{
+        if(newX<0||newY<0||newX> grid.length-1||newY> grid[0].length-1){
             return false;
+        }
+        else  {
+            return true;
         }
     }
 
@@ -210,6 +220,9 @@ public class GalacticMap {
         // Check if all cargoes have reached their destination
         int a=0;
         int b=0;
+        /**
+         * also loops through the whole loop
+         */
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[0].length;j++){
                 if(grid[i][j]!=null){
@@ -238,6 +251,9 @@ public class GalacticMap {
      */
     public boolean allExplorersAndCargoesRemoved() {
         int a=0;
+        /**
+         * also loops through the whole loop
+         */
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[0].length;j++){
                 if(grid[i][j]!=null){

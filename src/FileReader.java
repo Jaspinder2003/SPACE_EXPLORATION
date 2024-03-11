@@ -6,7 +6,9 @@ import java.util.HashSet;
 import java.util.Scanner;
 
 public class FileReader {
-
+    /**
+     * these are some hashmaps whicih i used to store information about the spaceship
+     */
     private static HashMap<Integer,String> shipType = new HashMap<>();
     private static HashMap<Integer, String> shipID = new HashMap<>();
     private static HashMap<Integer, Integer> shipX = new HashMap<>();
@@ -25,28 +27,43 @@ public class FileReader {
 
     public static GalacticMap readFromFile(String fileName) {
 
-
+/**
+ * use a scanner function to read the lines of a given file
+ */
         try (Scanner scanner = new Scanner(new File(fileName))) {
             String line1=scanner.nextLine();
+            /**
+             * used to check the format of size
+             */
             try{size = Integer.parseInt(line1);}
             catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Invalid data format: Unable to parse numeric value", e);
+                throw new IllegalArgumentException("Invalid data format: Unable to parse numeric value");
             }
             map = new GalacticMap(size);
+            /**
+             * creates an object of given size
+             */
             scanner.nextLine();
             int i = 1;
             HashSet<String> id = new HashSet<>();
-            HashSet<String> positions = new HashSet<>();
-
+            HashSet<String> positions = new HashSet<>();//use these hashsets to see if some id is already present
+/**
+ * next is used to check if there is a line present and if not it goes ahead
+ */
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 if (line!=null) {
                     String[] values = line.split(" ");
                     shipType.put(i, values[0]);
+                    /**
+                     * used to check if there is something else than a fighter
+                     */
                     if (!values[0].equals("FIGHTER") && !values[0].equals("CARGOSHIP") && !values[0].equals("EXPLORER")) {
                         throw new IllegalArgumentException("Invalid Spaceship Type: " + values[0]);
                     }
-
+/**
+ * used to check if there is a duplicate id present
+ */
                     if (id.add(values[1])) {
                         shipID.put(i, values[1]);
                     } else {
@@ -56,7 +73,9 @@ public class FileReader {
                     int x = Integer.parseInt(values[2]);
                     int y = Integer.parseInt(values[3]);
                     String position = x + "," + y;
-
+/**
+ * used to check if there is a duplicate position present
+ */
                     if (positions.add(position)) {
                         shipX.put(i, x);
                         shipY.put(i, y);
@@ -75,7 +94,9 @@ public class FileReader {
                             currentCargo.put(i, CC);
                             targetX.put(i, Tx);
                             targetY.put(i, Ty);
-
+/**
+ * used to check for a length of a line
+ */
                             if (values.length != 8) {
                                 throw new IllegalArgumentException("Invalid data format: Missing cargo ship attributes.");
                             }
@@ -102,9 +123,15 @@ public class FileReader {
                             map.placeSpaceship(explorer);
                             totalExplorers++;
                         }
+                        /**
+                         * place all the spaceships
+                         */
                     } else {
                         throw new IllegalArgumentException("Invalid data format: Missing spaceship attributes.");
                     }
+                    /**
+                     * used to check the length of the line
+                     */
 
                     if (values[1].length() < 5) {
                         throw new IllegalArgumentException("Invalid ID length: " + values[1]);
@@ -121,7 +148,7 @@ public class FileReader {
         }
          catch (IOException e) {
             throw new UncheckedIOException(new IOException("file not found: " + fileName, e));
-        }
+        }//error checking for file not found
 
         return map;
     }

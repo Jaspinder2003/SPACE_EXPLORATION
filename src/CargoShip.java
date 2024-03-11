@@ -10,9 +10,7 @@ public class CargoShip extends Spaceship {
 
     private int targetX; // The x-coordinate of the cargo ship's destination.
     private int targetY; // The y-coordinate of the cargo ship's destination.
-    private int X=0;
-    private int Y=0;
-    private int checkX=0;
+    private int checkX=0;//to check if X or Target X is higher.
 
     private boolean reachedDestination; // Indicates if the cargo has reached its destination
     String id="";
@@ -31,13 +29,14 @@ public class CargoShip extends Spaceship {
     public CargoShip(String id, int x, int y, double cargoCapacity, double currentCargo, int targetX, int targetY) {
         // Initialize CargoShip attributes properly
         super(id,x,y,SpaceshipType.CARGOSHIP);
-        X=x;
-        Y=y;
+/**
+ * uses super() to inherit from spaceship class
+ */
         this.targetX=targetX;
         this.targetY=targetY;
         this.currentCargo=currentCargo;
         this.cargoCapacity=cargoCapacity;
-        checkX=X-targetX;
+        checkX=getX()-targetX;
         this.id=id;
     }
 
@@ -49,43 +48,50 @@ public class CargoShip extends Spaceship {
      */
     @Override
     public void move(GalacticMap galacticMap) {
-        if(X==targetX&&Y==targetY){
+        /**
+         * use if and else to see if a move is even valid or possible by checking
+         * if there is already a spaceship at the new position
+         */
+        if(getX()==targetX&&getY()==targetY){
             System.out.println("CargoShip: c-"+id.charAt(1)+id.charAt(2)+id.charAt(3)+id.charAt(4)+" is already in destination");
         }
         else {
             System.out.print("........Moving.......");
             if (checkX > 0) {
-                if(galacticMap.getSpaceshipAt(X-1,Y)==null){
-                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X-1)+","+ Y+")\n");
-                change(galacticMap, X - 1, Y);} else if (galacticMap.getSpaceshipAt(X-1,Y)!=null&&Y>targetY) {
-                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X)+","+ (Y-1)+")\n");
-                    change(galacticMap,X,Y-1);
-                } else if (galacticMap.getSpaceshipAt(X-1,Y)!=null&&Y<targetY){
-                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X)+","+ (Y+1)+")\n");
-                    change(galacticMap,X,Y+1);
+                if(galacticMap.getSpaceshipAt(getX()-1,getY())==null){
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(getX()-1)+","+ getY()+")\n");
+                change(galacticMap, getX() - 1, getY());} else if (galacticMap.getSpaceshipAt(getX()-1,getY())!=null&&getY()>targetY) {
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(getX())+","+ (getY()-1)+")\n");
+                    change(galacticMap,getX(),getY()-1);
+                } else if (galacticMap.getSpaceshipAt(getX()-1,getY())!=null&&getY()<targetY){
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(getX())+","+ (getX()+1)+")\n");
+                    change(galacticMap,getX(),getY()+1);
                 }
 
             } else if(checkX<0) {
-                if(galacticMap.getSpaceshipAt(X+1,Y)==null){
-                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X+1)+","+ Y+")\n");
-                    change(galacticMap, X + 1, Y);} else if (galacticMap.getSpaceshipAt(X+1,Y)!=null&&Y>targetY) {
-                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X)+","+ (Y-1)+")\n");
-                    change(galacticMap,X,Y-1);
-                } else if (galacticMap.getSpaceshipAt(X+1,Y)!=null&&Y<targetY){
-                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(X)+","+ (Y+1)+")\n");
-                    change(galacticMap,X,Y+1);
+                if(galacticMap.getSpaceshipAt(getX()+1,getY())==null){
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(getX()+1)+","+ getY()+")\n");
+                    change(galacticMap, getX() + 1, getY());} else if (galacticMap.getSpaceshipAt(getX()+1,getY())!=null&&getY()>targetY) {
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(getX())+","+ (getY()-1)+")\n");
+                    change(galacticMap,getX(),getY()-1);
+                } else if (galacticMap.getSpaceshipAt(getX()+1,getY())!=null&&getY()<targetY){
+                    System.out.println("Start moving CARGOSHIP"+ id+" to the position: "+"("+(getX())+","+ (getY()+1)+")\n");
+                    change(galacticMap,getX(),getY()+1);
                 }
             }
 
             else{
-                if(Y<targetY){
-                    change(galacticMap,X,Y+1);
-                } else if (Y>targetY) {
-                    change(galacticMap,X,Y-1);
+                if(getY()<targetY){
+                    change(galacticMap,getX(),getY()+1);
+                } else if (getY()>targetY) {
+                    change(galacticMap,getX(),getY()-1);
                 }
             }
             // CargoShip-specific movement logic
         }
+        /**
+         * used to print th last statement
+         */
         System.out.println("Move Configuration\n"+galacticMap.toString());
     }
 
@@ -99,15 +105,21 @@ public class CargoShip extends Spaceship {
     public void interact(GalacticMap galacticMap, Spaceship other) {
         double x;
         System.out.println(".........interacting...........with.... " + other.getName());
-        if(other.getX()==X && other.getY()==Y){
+        if(other.getX()==getX() && other.getY()==getY()){
             System.out.println("CargoShip cannot interact with itself");
         }
+        /**
+         * Cargoship cannot interact with itself or fighter or explorer
+         */
         else if(other.getType()==SpaceshipType.FIGHTER){
             System.out.println("CargoShip cannot interact with FIGHTER");
         }
         else if(other.getType()==SpaceshipType.EXPLORER){
             System.out.println("CargoShip cannot interact with EXPLORER");
         }
+        /**
+         * used to load or unload depending on the difference between the currentload
+         */
         else if(other.getType()==SpaceshipType.CARGOSHIP){
             CargoShip ship=(CargoShip) other;
             double cc=ship.currentCargo;
@@ -205,9 +217,18 @@ public class CargoShip extends Spaceship {
         return reachedDestination;
     }
 
+    /**
+     *
+     * @param galacticMap
+     * @param newX
+     * @param newY
+     */
     private void change(GalacticMap galacticMap,int newX,int newY){
-        Spaceship f= galacticMap.getSpaceshipAt(X,Y);
+        Spaceship f= galacticMap.getSpaceshipAt(getX(),getY());
         galacticMap.moveSpaceshipTo(f,newX,newY);
     }
+    /**
+     * this function is used in changing the coordinates of the spaceship
+     */
 }
 
